@@ -56,7 +56,7 @@ try {
             
             var server = http.createServer(function(req, res) {
                 console.log(temperatura);
-                res.end('La temperatura del aire ess '+temperatura);
+                res.end('La temperatura del aire es '+temperatura);
             });
     
             server.listen(8000);
