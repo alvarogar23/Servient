@@ -121,7 +121,7 @@ servient.start().then((WoT) => {
         app.set('view engine', 'jade');
 
         app.get('/', function (req, res) {
-            res.render('air', { title: 'Aparato de aire', temperature: temperatura});
+            res.render('air', { title: 'Aparato de airee', temperature: temperatura});
         });
 
         

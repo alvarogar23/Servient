@@ -52,7 +52,7 @@ try {
                 "mostrarTemperatura",
                 (x) => console.info("value:", x),
                 (e) => console.error("Error: %s", e),
-                () => console.info("Completado")
+                () => console.info("Completadoo")
             );
 
             console.info("Suscrito");
