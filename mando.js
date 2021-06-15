@@ -16,6 +16,14 @@ let td = `{
     "@context": "https://www.w3.org/2019/wot/td/v1",
     "title": "AireAcondicionado",
     "id": "urn:dev:wot:mqtt:AireAcondicionado",
+    "properties": {
+        "temperatura": {
+            "type": "integer",
+            "forms": [{
+                "href": "mqtt://test.mosquitto.org:1883/AireAcondicionado/properties/temperatura"
+            }]
+        }
+    },
     "actions" : {
         "OnOff": {
             "forms": [
@@ -31,13 +39,18 @@ let td = `{
             "forms": [
                 {"href": "mqtt://test.mosquitto.org:1883/AireAcondicionado/actions/decrementar"}
             ]
+        },
+        "leerTemperatura": {
+            "forms": [
+                {"href": "mqtt://test.mosquitto.org:1883/AireAcondicionado/actions/leerTemperatura"}
+            ]
         }
     }, 
     "events": {
-        "mostrarTemperatura": {
+        "estadoTemperatura": {
             "type": "integer",
             "forms": [
-                {"href": "mqtt://test.mosquitto.org:1883/AireAcondicionado/events/mostrarTemperatura"}
+                {"href": "mqtt://test.mosquitto.org:1883/AireAcondicionado/events/estadoTemperatura"}
             ]
         } 
     } 
@@ -48,15 +61,16 @@ try {
         WoT.consume(JSON.parse(td)).then((thing) => {
             console.info(td);
 
+            
+
             thing.subscribeEvent(
-                "mostrarTemperatura",
-                (x) => console.info("value:", x),
+                "estadoTemperatura",
+                (temperatura) => console.info("value:", temperatura),
                 (e) => console.error("Error: %s", e),
                 () => console.info("Completado")
-            );
+            )
 
             console.info("Suscrito");
-
 
             app.set('view engine', 'jade');
 
@@ -81,15 +95,8 @@ try {
             });
 
             app.get("/mostrarTemperatura", function (req, res) {
-                res.render("mando", {
-                    mostrarTemperatura: async () => {
-                        return thing.readProperty('temperatura');
-
-                    }
-                });
+                res.render("mando");
             });
-
-
 
             app.listen(4000);
         });

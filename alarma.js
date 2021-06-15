@@ -14,6 +14,12 @@ let td = `{
     "@context": "https://www.w3.org/2019/wot/td/v1",
     "title": "AireAcondicionado",
     "id": "urn:dev:wot:mqtt:AireAcondicionado",
+    "properties": {
+        "temperatura" : {
+            "type": "integer",
+            "forms": [{"href": "mqtt://test.mosquitto.org:1883/AireAcondicionado/properties/temperatura"}]
+        }
+    },
     "actions" : {
         "alarma": {
             "forms": [
@@ -22,10 +28,10 @@ let td = `{
         }
     }, 
     "events": {
-        "mostrarTemperatura": {
+        "estadoTemperatura": {
             "type": "integer",
             "forms": [
-                {"href": "mqtt://test.mosquitto.org:1883/AireAcondicionado/events/mostrarTemperatura"}
+                {"href": "mqtt://test.mosquitto.org:1883/AireAcondicionado/events/estadoTemperatura"}
             ]
         } 
     } 
@@ -36,7 +42,9 @@ try {
         WoT.consume(JSON.parse(td)).then((thing) => {
             console.info(td);
 
-            thing.subscribeEvent('mostrarTemperatura',
+
+
+            thing.subscribeEvent('estadoTemperatura',
                 x => console.info('Temperatura: ', x),
                 e => console.error('Error: %s', e),
                 () => console.info("Completado")
@@ -44,30 +52,29 @@ try {
 
             console.info('Suscrito');
 
-            
+
             setInterval(async () => {
                 thing.invokeAction('alarma')
-                .then((res) => {})
-                .catch((err) => {
-                    console.error('Error en la acción de alarma', err.message);
-                });
+                    .then((res) => {})
+                    .catch((err) => {
+                        console.error('Error en la acción de alarma', err.message);
+                    });
+
+
+
                 console.info('Activa la alarma!!!!');
             }, 1000);
-            
-            var server = http.createServer(function(req, res) {
-                console.log(temperatura);
-                res.end('La temperatura del aire es '+temperatura);
-            });
-    
-            server.listen(8000);
 
-            
-            
+
+
+
+
+
+
 
 
         });
     });
-}catch(err){
+} catch (err) {
     console.error('Error en el script: ', err);
 }
-
